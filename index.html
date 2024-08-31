@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Call Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      #login-container,
+      #signup-container {
+        max-width: 300px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      #chat-container {
+        display: none;
+        flex: 1;
+        flex-direction: column;
+      }
+      #video-container {
+        display: flex;
+        justify-content: center;
+        height: 70%;
+      }
+      #local-video {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        bottom: 20px;
+        right: 20px;
+      }
+      #remote-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      #controls {
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+      }
+      .control-button {
+        font-size: 18px;
+        margin: 0 10px;
+        padding: 10px 20px;
+      }
+      #user-list {
+        width: 200px;
+        border-right: 1px solid #ddd;
+        padding: 10px;
+      }
+      input,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="login-container">
+      <h2>Login</h2>
+      <input type="text" id="login-username" placeholder="Username" />
+      <input type="password" id="login-password" placeholder="Password" />
+      <button id="login-button">Login</button>
+      <p>Don't have an account? <a href="#" id="show-signup">Sign up</a></p>
+    </div>
+
+    <div id="signup-container" style="display: none">
+      <h2>Sign Up</h2>
+      <input type="text" id="signup-username" placeholder="Username" />
+      <input type="password" id="signup-password" placeholder="Password" />
+      <button id="signup-button">Sign Up</button>
+      <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+    </div>
+
+    <div id="chat-container">
+      <div id="user-list"></div>
+      <div id="video-container">
+        <video id="remote-video" autoplay></video>
+        <video id="local-video" autoplay muted></video>
+      </div>
+      <div id="controls">
+        <button id="call-button" class="control-button">Start Call</button>
+        <button id="end-call-button" class="control-button">End Call</button>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
