@@ -1,6 +1,7 @@
 let peer;
 let localStream;
 let currentCall;
+let currentUser;
 const users = {};
 
 const loginContainer = document.getElementById("login-container");
@@ -12,12 +13,14 @@ const remoteVideo = document.getElementById("remote-video");
 const callButton = document.getElementById("call-button");
 const endCallButton = document.getElementById("end-call-button");
 
-document.getElementById("show-signup").addEventListener("click", () => {
+document.getElementById("show-signup").addEventListener("click", (e) => {
+  e.preventDefault();
   loginContainer.style.display = "none";
   signupContainer.style.display = "block";
 });
 
-document.getElementById("show-login").addEventListener("click", () => {
+document.getElementById("show-login").addEventListener("click", (e) => {
+  e.preventDefault();
   signupContainer.style.display = "none";
   loginContainer.style.display = "block";
 });
@@ -37,6 +40,7 @@ document.getElementById("login-button").addEventListener("click", () => {
   const username = document.getElementById("login-username").value;
   const password = document.getElementById("login-password").value;
   if (users[username] && users[username].password === password) {
+    currentUser = username;
     loginContainer.style.display = "none";
     chatContainer.style.display = "flex";
     initPeer(username);
@@ -78,9 +82,22 @@ function updateUserList() {
     if (user.peerId && user.peerId !== peer.id) {
       const userElement = document.createElement("div");
       userElement.textContent = username;
-      userElement.addEventListener("click", () => startCall(user.peerId));
+      userElement.classList.add("user-item");
+      userElement.addEventListener("click", () => selectUser(username));
       userList.appendChild(userElement);
     }
+  }
+}
+
+function selectUser(username) {
+  const userElements = userList.querySelectorAll(".user-item");
+  userElements.forEach((el) => el.classList.remove("selected"));
+  const selectedElement = Array.from(userElements).find(
+    (el) => el.textContent === username,
+  );
+  if (selectedElement) {
+    selectedElement.classList.add("selected");
+    callButton.disabled = false;
   }
 }
 
@@ -124,11 +141,6 @@ endCallButton.addEventListener("click", () => {
   endCallButton.disabled = true;
 });
 
-userList.addEventListener("click", (event) => {
-  if (event.target.tagName === "DIV") {
-    userList
-      .querySelectorAll("div")
-      .forEach((div) => div.classList.remove("selected"));
-    event.target.classList.add("selected");
-  }
-});
+// Initialize call button as disabled
+callButton.disabled = true;
+endCallButton.disabled = true;
